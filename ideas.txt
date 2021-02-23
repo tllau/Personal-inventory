@@ -1,0 +1,12 @@
+idea 
+personal inventory
+
+
+Include different category
+like game's inventory
+
+marketplace: buy, trade or sell items 
+
+
+1. build register
+2. check password (>8 character)
