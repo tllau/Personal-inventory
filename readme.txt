@@ -1,0 +1,1 @@
+This is an web app for recording and displaying personal inventory, like a typical RPG game.
