@@ -69,16 +69,20 @@ def register():
             return redirect("/")
     else:
         return render_template("register.html")       
-
 @app.route("/login", methods=['GET', 'POST'])
+
 def login():
     if request.method == "POST":
         email = request.form["email"]
-        session["email"] = email
-        session.permanent = True
-        flash("Login successfully")
-        return redirect("/")
+        if Users.query.filter_by(email=email).first():
+            session["email"] = email
+            session.permanent = True
+            flash("Login successfully")
+            return redirect("/")
+        else:
+            return redirect(url_for("login"))
     else:
+        # if login in already
         if "email" in session:
             return redirect(url_for("index"))
         else:
