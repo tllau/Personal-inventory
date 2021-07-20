@@ -1,5 +1,5 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for, flash
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required, login_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -11,24 +11,25 @@ app.secret_key = "b'\x0cZf\xcdg\xae\x884\xe5F\x08\xb62\x8b\n\xf4'"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 app.permanent_session_lifetime = timedelta(minutes=5)
-db = SQLAlchemy(app)
-
-# User database
-class Users(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), unique=True)
-        
-    def __repr__(self):
-        return "<User %r>" % self.email
-        
+db = SQLAlchemy(app)       
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 login_manager = LoginManager()
 login_manager.init_app(app)
-@login_manager.user_loader
+login_manager.login_view = "login"
 
+# User database
+class Users(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)       
+    def __repr__(self):
+        return "<User %r>" % self.email
+        
+@login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return Users.query.get(int(user_id))
+    
+    
 
 # Ensure responses aren't cached
 @app.after_request
@@ -45,7 +46,9 @@ def index():
 @app.route("/admin")
 def admin():
     return render_template("admin.html", users=Users.query.all())
-@app.route("/profile")  
+    
+@app.route("/profile") 
+@login_required
 def profile():
     if "email" in session:
         return render_template("profile.html", email=session["email"])
@@ -68,15 +71,15 @@ def register():
             flash("Register sucessfully")
             return redirect("/")
     else:
-        return render_template("register.html")       
+        return render_template("register.html")   
+        
 @app.route("/login", methods=['GET', 'POST'])
-
 def login():
     if request.method == "POST":
         email = request.form["email"]
         if Users.query.filter_by(email=email).first():
-            session["email"] = email
-            session.permanent = True
+            user = LoginManager.user_loader(email)
+            login_user(user)
             flash("Login successfully")
             return redirect("/")
         else:
@@ -88,11 +91,11 @@ def login():
         else:
             return render_template("login.html")
         
-@app.route("/logout") 
+@app.route("/logout")
+@login_required 
 def logout():
-    if "email" in session:
-        session.pop("email", None) 
-        flash("You have been logout.")    
+    session.pop("email", None) 
+    flash("You have been logout.")    
     return redirect(url_for("login"))
         
     
