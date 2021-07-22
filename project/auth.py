@@ -1,16 +1,30 @@
-from flask import Blueprint
+from flask import Blueprint, render_template, redirect, request, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
+from .model import User
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login')
 def login():
-    return 'Login'
+    return render_template('login.html')
 
-@auth.route('/signup')
-def signup():
-    return 'Signup'
+@auth.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form["email"]
+        username = request.form["username"]
+        password = request.form["inputPassword"] 
+        user = User.query.filter_by(email=email).first()
+        if user:
+            return redirect(url_for("auth.register"))
+        new_user = User(email=email, username=username, password=generate_password_hash(password, method='sha256'))
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('auth.login'))
+    else:
+        return render_template('register.html')
 
 @auth.route('/logout')
 def logout():
-    return 'Logout'
+    return render_template('logout.html')
