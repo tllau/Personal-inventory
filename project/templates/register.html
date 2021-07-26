@@ -5,20 +5,20 @@
 {% block main %}
 	<form action="/register", method="POST">
 		<div class="form-group">
-			<label for="inputUsername">Email</label>
+			<label for="inputUsername">Email *</label>
 			<input type="email" class="form-control" autofocus id="email" name="email" placeholder="Please enter your email"><br>
 		</div>
 		<div class="form-group">
-			<label for="inputUsername">Username</label>
+			<label for="inputUsername">Username *</label>
 			<input type="text" class="form-control" autofocus id="username" name="username" placeholder="Please enter your username"><br>
 		</div>		
 		<div class="form-group">
-			<label for="inputPassword">Password</label>
+			<label for="inputPassword">Password *</label>
 			<input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password"><br>
 			<small id="isPasswordValid" class="form-text text-muted">Password should be at least 8 charachers long</small>
 		</div>
 		<div class="form-group">
-			<label for="confirmPassword">Password</label>
+			<label for="confirmPassword">Confirm password *</label>
 			<input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm password">
 			<small id="isPasswordMatch" class="form-text text-muted"></small>
 		</div>
