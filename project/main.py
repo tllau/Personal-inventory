@@ -1,5 +1,5 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for, flash, Blueprint
-from flask_login import LoginManager, login_required, login_user, UserMixin
+from flask_login import login_required, login_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -12,9 +12,10 @@ main = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
+@login_required
 @main.route('/profile')
 def profile():
-    return render_template('profile.html')
+    return render_template('profile.html', name=current_user.username)
     
     
     

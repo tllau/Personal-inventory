@@ -1,4 +1,4 @@
-from flask_login import login_user
+from flask_login import login_user, login_required, logout_user
 from flask import Blueprint, render_template, redirect, request, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
@@ -12,8 +12,8 @@ def login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
+        remember = True if request.form.get("remember") else False
         user = User.query.filter_by(email=email).first()
-        remember = False
         if not user or not check_password_hash(user.password, password):
             flash("Wrong email or password")
             return redirect(url_for("auth.login"))
@@ -44,7 +44,9 @@ def register():
     else:
         return render_template('register.html')
 
+@login_required
 @auth.route('/logout')
 def logout():
-        
-    return render_template('logout.html')
+    logout_user() 
+    flash("Logout successfully")
+    return redirect(url_for("auth.login"))
