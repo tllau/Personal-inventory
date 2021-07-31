@@ -1,4 +1,4 @@
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from flask import Blueprint, render_template, redirect, request, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
@@ -20,8 +20,11 @@ def login():
         else:
             login_user(user, remember=remember)
             return redirect(url_for("main.profile"))
-    else:           
-        return render_template("login.html")
+    else:
+        if current_user.get_id():
+            return redirect(url_for("main.index"))
+        else:
+            return render_template("login.html")
 
 @auth.route('/register', methods=["GET", "POST"])
 def register():
