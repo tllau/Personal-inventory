@@ -3,7 +3,7 @@ from flask_login import login_required, login_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from datetime import timedelta
+from .model import Item_register
         
 main = Blueprint('main', __name__)
 
@@ -11,7 +11,14 @@ main = Blueprint('main', __name__)
 @main.route('/')
 @login_required
 def index():
+    # items = Item_register.query.filter_by(user_id=current_user.id).all()
     return render_template('index.html', name=current_user.username)
+
+@main.route('/add_item', methods=['POST', 'GET'])
+@login_required
+def add_item():
+    if request.method == 'GET':
+        return render_template('add_item.html', name=current_user.username)
 
 @main.route('/profile')
 @login_required

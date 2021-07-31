@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}
+    Add item
+{% endblock %}
+{% block main %}
+    <form action="/login", method="POST">
+		<div class="mb-3">
+	      <label for="item_name" class="form-label">Name of the item</label>
+		  <input type="text" class="form-control" id="item_name" name="item_name">
+	    </div>
+		<div class="mb-3">
+	      <label for="description" class="form-label">Description</label>
+		  <input type="text" class="form-control" id="description" name="description">
+	    </div>
+	    <div class="mb-3 form-check">
+			<input type="checkbox" class="form-check-input" id="remember" name="remember">
+			<label class="form-check-label" for="exampleCheck1">Is comsumable</label>
+	    </div>
+	    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}
