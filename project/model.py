@@ -8,3 +8,13 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100))
     def __repr__(self):
         return "<User %r>" % self.email
+        
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True)
+    is_comsumable = db.Column(db.Boolean)
+    
+class Item_register(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
