@@ -6,7 +6,8 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">id</th>
+      <th scope="col">ID</th>
+	  <th scope="col">Name</th>
       <th scope="col">Comsumable</th>
       <th scope="col">Archive</th>
       <th scope="col">Description</th>
@@ -17,23 +18,39 @@
 	{% for item in items %}
 		<tr>
 		  <th scope="row">item.id</th>
-		  <td>item.is_comsumable</td>
-		  <td>item.is_archive</td>
-		  <td>item.description</td>
-		  <td>item.user_id</td>
+		  <td>{{item.name}}</td>
+		  <td>{{item.is_comsumable}}</td>
+		  <td>{{item.is_archive}}</td>
+		  <td>{{item.description}}</td>
+		  <td>{{item.user_id}}</td>
 		</tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
+	{% endfor %}
   </tbody>
 </table>
+  <form action="/", method="POST">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<input type="text" class="form-control" id="itemName" name="itemName" placeholder="Name">
+			</div>
+			<div class="col">			
+				<input type="text" class="form-control" id="description" name="description" placeholder="Description">
+			</div>
+		</div>
+		Comsumable?    
+		<div class="form-check form-check-inline">
+		  <input class="form-check-input" type="radio" name="comsumable" id="comsumableTrue" value=True>
+		  <label class="form-check-label" for="comsumableTrue">
+			Yes
+		  </label>
+		</div>
+		<div class="form-check form-check-inline">
+		  <input class="form-check-input" type="radio" name="comsumable" id="comsumableFalse" checked value=False>
+		  <label class="form-check-label" for="comsumableFalse">
+			No
+		  </label>
+		</div>		
+	</div>
+    <button type="submit" class="btn btn-primary">Add item</button>
+  </form>
 {% endblock %}

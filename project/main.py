@@ -3,16 +3,25 @@ from flask_login import login_required, login_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+from . import db
 from .model import Item
+import sys
         
 main = Blueprint('main', __name__)
 
 
-@main.route('/')
+@main.route('/', methods=["POST", "GET"])
 @login_required
 def index():
-    items = Item.query.filter_by(user_id=current_user.id).all()
-    return render_template('index.html', name=current_user.username, items=items)
+    if request.method == "POST":
+        new_item = Item(name=request.form["itemName"], description=request.form["description"], user_id=current_user.id, is_comsumable=request.form['comsumable'] == 'True' ,is_archive=False)
+        print(new_item.name, file=sys.stderr)
+        db.session.add(new_item)
+        db.session.commit()
+        return redirect(url_for('main.index'))
+    else:
+        items = Item.query.filter_by(user_id=current_user.id).all()
+        return render_template('index.html', name=current_user.username, items=items)
 
 @main.route('/add_item', methods=['POST', 'GET'])
 @login_required

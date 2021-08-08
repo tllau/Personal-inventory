@@ -17,5 +17,5 @@ class Item(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     is_archive = db.Column(db.Boolean, nullable=False)
     # label = db.Column(String(200))
-     def __repr__(self):
+    def __repr__(self):
         return "<Item %r>" % self.name
