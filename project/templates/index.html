@@ -17,17 +17,31 @@
   <tbody>
 	{% for item in items %}
 		<tr>
-		  <th scope="row">item.id</th>
+		  <th scope="row">{{item.id}}</th>
 		  <td>{{item.name}}</td>
 		  <td>{{item.is_comsumable}}</td>
 		  <td>{{item.is_archive}}</td>
 		  <td>{{item.description}}</td>
 		  <td>{{item.user_id}}</td>
+		  <td>
+		  <!-- Call to action buttons -->
+		    <ul class="list-inline m-0">
+			  <li class="list-inline-item">
+                <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-table"></i></button>
+			  </li>
+			  <li class="list-inline-item">
+				<button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+			  </li>
+			  <li class="list-inline-item">
+				<button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+			  </li>
+			</ul>
+		  </td>
 		</tr>
 	{% endfor %}
   </tbody>
 </table>
-  <form action="/", method="POST">
+<form action="/", method="POST">
 	<div class="container">
 		<div class="row">
 			<div class="col">
@@ -51,6 +65,7 @@
 		  </label>
 		</div>		
 	</div>
-    <button type="submit" class="btn btn-primary">Add item</button>
-  </form>
+	<button type="submit" class="btn btn-primary">Add item</button>
+</form>
+
 {% endblock %}
